@@ -5,16 +5,18 @@ import { IQuestion } from '../../types/vocabulary';
 
 const N2Index = () => {
   const [questionList, setQuestionList] = useState<IQuestion[]>([]);
-  const navigation = useNavigate()
+  const navigation = useNavigate();
   useEffect(() => {
     queryQuestionList().then((res) => {
       console.log(res);
       setQuestionList(res.data);
     });
   }, []);
-  const navN2Detail = (id: number) => {
-    console.log(id)
-    navigation('/n2/detail')
+  const navN2Detail = (id: number, title: string) => {
+    console.log(id);
+    navigation('/n2/detail', {
+      state: { id, title },
+    });
   };
   return (
     <>
@@ -29,7 +31,7 @@ const N2Index = () => {
                   dangerouslySetInnerHTML={{
                     __html: question.QuestionTitle,
                   }}
-                  onClick={() => navN2Detail(question.Id)}
+                  onClick={() => navN2Detail(question.QuestionId, question.QuestionTitle)}
                 ></p>
               </div>
             </div>

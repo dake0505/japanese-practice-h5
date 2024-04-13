@@ -36,7 +36,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Header />
-    <main className="grid min-h-full place-items-center bg-white px-6 py-2">
+    <main className="grid min-h-full bg-white px-6 py-2">
       <RouterProvider router={router} />
     </main>
   </React.StrictMode>
