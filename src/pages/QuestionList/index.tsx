@@ -1,15 +1,18 @@
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-
-const questions = [
-  { id: 1, type: 'Multiple Choice' },
-  { id: 2, type: 'True/False' },
-  { id: 3, type: 'Short Answer' },
-];
+import { queryQuestionList } from "../../service/question";
+import { Question } from "../../types/question";
 
 const QuestionList = () => {
+  const [questionList, setQuestionList] = useState<Question[]>([])
   const navigator = useNavigate()
+
+  useEffect(() => {
+    queryQuestionList().then(res => {
+      setQuestionList(res.data)
+    })
+  }, [])
 
   const onClickQuestion = () => {
     navigator("/questionDetail")
@@ -28,14 +31,14 @@ const QuestionList = () => {
           <h1 className="text-2xl font-bold text-center flex-grow">Question List</h1>
         </div>
         <ul className="pt-16  overflow-y-auto">
-          {questions.map((question) => (
+          {questionList.map((question) => (
             <li
               key={question.id}
               className="p-4 mb-2 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer flex justify-between items-center"
               onClick={onClickQuestion}
             >
-              <span>Question ID: {question.id}</span>
-              <span>{question.type}</span>
+              <span>{question.id}</span>
+              <span>{question.questionTitle}</span>
             </li>
           ))}
         </ul>

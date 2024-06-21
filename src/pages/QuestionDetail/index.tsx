@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { queryQuestionDetail } from '../../service/question';
+import { QuestionDetail } from '../../types/question';
 
 const questions = [
   {
@@ -25,8 +27,18 @@ const QuestionDetailPage = () => {
   const navigator = useNavigate()
   const question = questions.find(q => q.id === 1);
   const [selectedOption, setSelectedOption] = useState<string>();
+  const [questionDetail, setQuestionDetail] = useState<QuestionDetail>();
+
+  useEffect(() => {
+    queryQuestionDetail(2).then(res => {
+      setQuestionDetail(res.data)
+    })
+  }, [])
   const handleBack = () => {
     navigator("/questionList")
+  }
+  const onSubmit = () => {
+
   }
 
   if (!question) {
@@ -42,21 +54,23 @@ const QuestionDetailPage = () => {
           <h1 className="text-2xl font-bold text-center flex-grow">Question Detail</h1>
         </div>
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-        <h1 className="text-2xl font-bold mb-4">Question {question.id}</h1>
-        <p className="text-lg mb-4">{question.title}</p>
+        <h1 className="text-2xl font-bold mb-4">Question {questionDetail?.id}</h1>
+        <p className="text-lg mb-4">{questionDetail?.questionTitle}</p>
         <form>
           <div className="grid grid-cols-1 gap-4">
-            {question.options.map((option, index) => (
+            {questionDetail?.answerItems.map((option, index) => (
               <div
                 key={index}
-                onClick={() => setSelectedOption(option)}
+                onClick={() => {
+                  setSelectedOption(option.answerId)
+                }}
                 className={`p-4 rounded-lg cursor-pointer text-center border-2 ${
-                  selectedOption === option
+                  selectedOption === option.answerId
                     ? 'bg-blue-100 border-blue-600'
                     : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
                 }`}
               >
-                {option}
+                {option.answerDesc}
               </div>
             ))}
           </div>
@@ -64,7 +78,7 @@ const QuestionDetailPage = () => {
             <button
               type="button"
               className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-800 w-full"
-              onClick={() => alert(`You selected: ${selectedOption}`)}
+              onClick={onSubmit}
             >
               Submit
             </button>

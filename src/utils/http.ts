@@ -9,7 +9,7 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么：例如添加token
-    // config.headers['Authorization'] = '你的token';
+    config.headers['Authorization'] = localStorage.getItem("Authorization");
     return config;
   },
   (error) => {

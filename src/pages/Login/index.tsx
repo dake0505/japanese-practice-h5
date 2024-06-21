@@ -7,7 +7,7 @@ const AuthPage = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white py-6">
-      <div className="rounded-lg shadow-lg max-w-sm w-full">
+      <div className="rounded-lg max-w-sm w-full">
         <div className="flex justify-around mb-6">
           <button
             className={`py-2 px-4 ${activeTab === 'login' ? 'border-b-2 border-blue-600' : ''}`}

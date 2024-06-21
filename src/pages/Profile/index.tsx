@@ -1,6 +1,7 @@
 
 import { FaBook, FaStar, FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../../components/Footer';
 
 const ProfilePage = () => {
   const userEmail = 'user@example.com'; // 这是示例数据，您可以从实际的用户数据源获取
@@ -11,6 +12,7 @@ const ProfilePage = () => {
   }
 
   return (
+  <>
     <div className="flex items-center justify-center min-h-screen  p-4">
       <div className="bg-white rounded-lg p-6 max-w-lg w-full">
         <div className="flex justify-center mb-4">
@@ -43,6 +45,8 @@ const ProfilePage = () => {
         </div>
       </div>
     </div>
+    <Footer />
+  </>
   );
 };
 
