@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://nearby-cymbre-japanese-practice-46aa42a8.koyeb.app/api/:path*"
+    }
+  ]
+}
