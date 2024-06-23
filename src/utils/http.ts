@@ -30,8 +30,12 @@ http.interceptors.response.use(
       return res;
     }
   },
-  (error) => {
-    console.log('err' + error);
+ (error) => {
+    if (error.response && error.response.status === 401) {
+      window.location.href = '/login';
+    } else {
+      console.log('err' + error);
+    }
     return Promise.reject(error);
   },
 );
