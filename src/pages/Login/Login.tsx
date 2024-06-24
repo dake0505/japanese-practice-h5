@@ -6,11 +6,14 @@ const LoginPage = () => {
   const navigator = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [showAlert, setShowAlert] = useState(false);
+
   const onLogin = async (e: FormEvent) => {
     e.preventDefault();
     const res = await login({ Email: email, Password: password });
     console.log(res);
     localStorage.setItem('Authorization', res.data.token);
+    setShowAlert(true);
     navigator('/typeList');
   };
   return (
@@ -59,12 +62,13 @@ const LoginPage = () => {
           </form>
         </div>
       </div>
-      <div role="alert" className="alert alert-success">
-        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span>Your purchase has been confirmed!</span>
-      </div>
+      {showAlert && (<div className="alert alert-success flex fixed w-10/12 top-5 left-1/2 transform -translate-x-1/2 transition-opacity duration-1000 opacity-100 animate-fade-out">
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Login Success!</span>
+        </div>
+      )}
     </>
   );
 };
