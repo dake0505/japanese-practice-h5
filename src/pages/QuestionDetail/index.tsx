@@ -1,42 +1,24 @@
 import { useEffect, useState } from 'react';
 import { FaArrowLeft, FaRegStar } from 'react-icons/fa';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { queryQuestionDetail } from '../../service/question';
 import { QuestionDetail } from '../../types/question';
 
-const questions = [
-  {
-    id: 1,
-    title: 'What is the capital of France?',
-    options: ['Paris', 'London', 'Berlin', 'Madrid'],
-  },
-  {
-    id: 2,
-    title: 'Which planet is known as the Red Planet?',
-    options: ['Earth', 'Mars', 'Jupiter', 'Venus'],
-  },
-  {
-    id: 3,
-    title: 'What is the largest ocean on Earth?',
-    options: ['Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean', 'Pacific Ocean'],
-  },
-  // 添加更多题目数据
-];
-
 const QuestionDetailPage = () => {
   const navigator = useNavigate();
-  const question = questions.find((q) => q.id === 1);
+  const location = useLocation();
   const [selectedOption, setSelectedOption] = useState<string>();
   const [questionDetail, setQuestionDetail] = useState<QuestionDetail>();
   const [isDone, setIsDone] = useState<boolean>(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
 
   useEffect(() => {
-    queryQuestionDetail(2).then((res) => {
+    const id = new URLSearchParams(location.search).get('id');
+    queryQuestionDetail(Number(id)).then((res) => {
       setQuestionDetail(res.data);
     });
-  }, []);
+  }, [location.search]);
   const handleBack = () => {
     navigator('/questionList');
   };
@@ -44,6 +26,25 @@ const QuestionDetailPage = () => {
     setIsCorrect(selectedOption === questionDetail?.answerId);
     setIsDone(true);
   };
+  const onClickNext = () => {
+    console.log(questionDetail?.nextId);
+    if (!questionDetail?.nextId) return;
+    queryQuestionDetail(questionDetail?.nextId).then((res) => {
+      setQuestionDetail(res.data);
+      setIsDone(false)
+      setIsCorrect(false)
+    });
+  };
+  const onClickPre = () => {
+    console.log(questionDetail?.preId);
+    if (!questionDetail?.preId) return;
+    queryQuestionDetail(questionDetail?.preId).then((res) => {
+      setQuestionDetail(res.data);
+      setIsDone(false)
+      setIsCorrect(false)
+    });
+  };
+
   const handleResultStyle = (answerId: string): string => {
     const defaultStyle = 'bg-gray-100 border-gray-300 hover:bg-gray-200';
     if (isDone) {
@@ -56,10 +57,6 @@ const QuestionDetailPage = () => {
       return selectedOption === answerId ? 'bg-blue-100 border-blue-600' : defaultStyle;
     }
   };
-
-  if (!question) {
-    return <div>Question not found</div>;
-  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -81,7 +78,7 @@ const QuestionDetailPage = () => {
               <div
                 key={index}
                 onClick={() => {
-                  if (isDone) return
+                  if (isDone) return;
                   setSelectedOption(option.answerId);
                 }}
                 className={`p-4 rounded-lg cursor-pointer text-center border-2 ${handleResultStyle(option.answerId)}`}
@@ -92,10 +89,20 @@ const QuestionDetailPage = () => {
           </div>
           {isDone ? (
             <div className="flex justify-between mt-6">
-              <button type="button" className="bg-white text-black border-2 py-2 px-4 mr-4 rounded-full w-full">
+              <button
+                type="button"
+                className={`bg-white text-black border-2 py-2 px-4 mr-4 rounded-full w-full ${!questionDetail?.preId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={onClickPre}
+                disabled={!questionDetail?.preId}
+              >
                 上一题
               </button>
-              <button type="button" className="bg-black text-white py-2 px-4 ml-4 rounded-full hover:bg-gray-800 w-full">
+              <button
+                type="button"
+                className={`bg-black text-white py-2 px-4 ml-4 rounded-full hover:bg-gray-800 w-full ${!questionDetail?.nextId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={onClickNext}
+                disabled={!questionDetail?.nextId}
+              >
                 下一题
               </button>
             </div>

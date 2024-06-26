@@ -22,4 +22,6 @@ export type QuestionDetail = {
   questionTitle: string,
   answerId: string
   answerItems: Answer[]
+  nextId: number,
+  preId: number
 }
