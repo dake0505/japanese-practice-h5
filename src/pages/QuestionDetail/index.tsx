@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { FaArrowLeft, FaRegStar } from 'react-icons/fa';
+import { FaArrowLeft, FaRegStar, FaStar } from 'react-icons/fa';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { queryQuestionDetail } from '../../service/question';
+import { updateFavoriteItem } from '../../service/record';
 import { QuestionDetail } from '../../types/question';
 
 const QuestionDetailPage = () => {
@@ -14,34 +15,35 @@ const QuestionDetailPage = () => {
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
 
   useEffect(() => {
-    const id = new URLSearchParams(location.search).get('id');
-    queryQuestionDetail(Number(id)).then((res) => {
+    const questionId = new URLSearchParams(location.search).get('questionId');
+    if (!questionId) return;
+    queryQuestionDetail(questionId).then((res) => {
       setQuestionDetail(res.data);
     });
   }, [location.search]);
   const handleBack = () => {
-    navigator('/questionList');
+    navigator(-1);
   };
   const onSubmit = () => {
     setIsCorrect(selectedOption === questionDetail?.answerId);
     setIsDone(true);
   };
   const onClickNext = () => {
-    console.log(questionDetail?.nextId);
-    if (!questionDetail?.nextId) return;
-    queryQuestionDetail(questionDetail?.nextId).then((res) => {
+    console.log(questionDetail?.nextQuestionId);
+    if (!questionDetail?.nextQuestionId) return;
+    queryQuestionDetail(questionDetail?.nextQuestionId).then((res) => {
       setQuestionDetail(res.data);
-      setIsDone(false)
-      setIsCorrect(false)
+      setIsDone(false);
+      setIsCorrect(false);
     });
   };
   const onClickPre = () => {
-    console.log(questionDetail?.preId);
-    if (!questionDetail?.preId) return;
-    queryQuestionDetail(questionDetail?.preId).then((res) => {
+    console.log(questionDetail?.preQuestionId);
+    if (!questionDetail?.preQuestionId) return;
+    queryQuestionDetail(questionDetail?.preQuestionId).then((res) => {
       setQuestionDetail(res.data);
-      setIsDone(false)
-      setIsCorrect(false)
+      setIsDone(false);
+      setIsCorrect(false);
     });
   };
 
@@ -58,6 +60,14 @@ const QuestionDetailPage = () => {
     }
   };
 
+  const onClickFavorite = async () => {
+    if (!questionDetail?.questionId) return;
+    await updateFavoriteItem(questionDetail?.questionId);
+    queryQuestionDetail(questionDetail?.questionId).then((res) => {
+      setQuestionDetail(res.data);
+    });
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="flex items-center p-4 bg-white w-full fixed top-0 left-0 right-0 z-10 border-b">
@@ -65,8 +75,8 @@ const QuestionDetailPage = () => {
           <FaArrowLeft className="text-xl" />
         </button>
         <h1 className="text-2xl font-bold text-center flex-grow">Question Detail</h1>
-        <button className="ml-2 p-2">
-          <FaRegStar className="text-xl" />
+        <button className="ml-2 p-2" onClick={onClickFavorite}>
+          {questionDetail?.isFavorite ? <FaStar className="text-xl" /> : <FaRegStar className="text-xl" />}
         </button>
       </div>
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
@@ -91,17 +101,17 @@ const QuestionDetailPage = () => {
             <div className="flex justify-between mt-6">
               <button
                 type="button"
-                className={`bg-white text-black border-2 py-2 px-4 mr-4 rounded-full w-full ${!questionDetail?.preId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`bg-white text-black border-2 py-2 px-4 mr-4 rounded-full w-full ${!questionDetail?.preQuestionId ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={onClickPre}
-                disabled={!questionDetail?.preId}
+                disabled={!questionDetail?.preQuestionId}
               >
                 上一题
               </button>
               <button
                 type="button"
-                className={`bg-black text-white py-2 px-4 ml-4 rounded-full hover:bg-gray-800 w-full ${!questionDetail?.nextId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`bg-black text-white py-2 px-4 ml-4 rounded-full hover:bg-gray-800 w-full ${!questionDetail?.nextQuestionId ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={onClickNext}
-                disabled={!questionDetail?.nextId}
+                disabled={!questionDetail?.nextQuestionId}
               >
                 下一题
               </button>

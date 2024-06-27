@@ -14,8 +14,8 @@ const QuestionList = () => {
     })
   }, [])
 
-  const onClickQuestion = (id: number) => {
-    navigator(`/questionDetail?id=${id}`)
+  const onClickQuestion = (questionId: string) => {
+    navigator(`/questionDetail?questionId=${questionId}`)
   }
   const handleBack = () => {
     navigator("/typeList")
@@ -35,7 +35,7 @@ const QuestionList = () => {
             <li
               key={question.id}
               className="p-4 mb-2 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer flex justify-between items-center"
-              onClick={() => onClickQuestion(question.id)}
+              onClick={() => onClickQuestion(question.questionId)}
             >
               <span>{question.id}</span>
               <span>{question.questionTitle}</span>

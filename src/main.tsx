@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
+import FavoriteList from './pages/FavoriteList/index.tsx';
 import Home from './pages/Home/index.tsx';
 import LoginPage from './pages/Login/index.tsx';
 import ProfilePage from './pages/Profile/index.tsx';
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <ProfilePage />,
+  },
+  {
+    path: '/favorite',
+    element: <FavoriteList />,
   },
 ]);
 
