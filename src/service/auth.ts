@@ -6,3 +6,11 @@ export const login = (data: {
 }): Promise<IResponse<{ token : string}>> => {
   return http.post('/auth/login', data);
 };
+
+
+export const register = (data: {
+  Email: string,
+  Password: string
+}): Promise<IResponse<string>> => {
+  return http.post('/auth/register', data);
+};

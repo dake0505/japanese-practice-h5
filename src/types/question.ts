@@ -22,4 +22,7 @@ export type QuestionDetail = {
   questionTitle: string,
   answerId: string
   answerItems: Answer[]
+  nextQuestionId: string,
+  preQuestionId: string,
+  isFavorite: boolean
 }

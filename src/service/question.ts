@@ -12,6 +12,6 @@ export const queryQuestionList = (): Promise<IResponse<Question[]>> => {
   return http.get('/item/list');
 };
 
-export const queryQuestionDetail = (id: number): Promise<IResponse<QuestionDetail>> => {
-  return http.get('/item/detail', { params: { id } });
+export const queryQuestionDetail = (questionId: string): Promise<IResponse<QuestionDetail>> => {
+  return http.get('/item/detail', { params: { questionId } });
 };

@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
+import FavoriteList from './pages/FavoriteList/index.tsx';
 import Home from './pages/Home/index.tsx';
 import LoginPage from './pages/Login/index.tsx';
-import N1Index from './pages/N1/index.tsx';
-import N2Detail from './pages/N2/Detail/index.tsx';
-import N2Index from './pages/N2/index.tsx';
 import ProfilePage from './pages/Profile/index.tsx';
 import QuestionDetailPage from './pages/QuestionDetail/index.tsx';
 import QuestionList from './pages/QuestionList/index.tsx';
@@ -38,22 +36,8 @@ const router = createBrowserRouter([
     element: <ProfilePage />,
   },
   {
-    path: '/n2',
-    children: [
-      {
-        path: '',
-        element: <N2Index />,
-      },
-      {
-        path: 'detail',
-        element: <N2Detail />,
-      },
-    ],
-  },
-  {
-    path: '/n1',
-    element: <N1Index />,
-    children: [],
+    path: '/favorite',
+    element: <FavoriteList />,
   },
 ]);
 
