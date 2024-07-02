@@ -1,28 +1,35 @@
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  sendEmailVerification,
+} from 'firebase/auth';
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { register } from '../../service/auth';
+import firebaseApp from '../../utils/firebase';
 
 const RegisterPage = () => {
-  const navigator = useNavigate();
+  // const navigator = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const onRegister = async (e: FormEvent) => {
     e.preventDefault();
-    const res = await register({
-      Email: email,
-      Password: password
-    })
-    if (res.data) {
-      navigator("/login")
-    }
+    const auth = getAuth(firebaseApp);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    await sendEmailVerification(user);
   };
 
   return (
     <div className="p-6 my-auto">
       <div className="text-center mb-6">
-        <p className="text-gray-600">Please enter your details to create an account.</p>
+        <p className="text-gray-600">
+          Please enter your details to create an account.
+        </p>
       </div>
       <form onSubmit={onRegister}>
         <div className="mb-4">
@@ -56,7 +63,10 @@ const RegisterPage = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2" htmlFor="confirm-password">
+          <label
+            className="block text-gray-700 mb-2"
+            htmlFor="confirm-password"
+          >
             Confirm Password
           </label>
           <input
@@ -71,7 +81,10 @@ const RegisterPage = () => {
           />
         </div>
         <div className="flex justify-center">
-          <button type="submit" className="bg-black text-white py-2 px-4 rounded-full w-full hover:bg-gray-800">
+          <button
+            type="submit"
+            className="bg-black text-white py-2 px-4 rounded-full w-full hover:bg-gray-800"
+          >
             Register
           </button>
         </div>
