@@ -43,7 +43,7 @@ const QuestionList = () => {
               className="p-4 mb-2 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer flex justify-between items-center"
             >
               <span>{question.id}</span>
-              <span className="flex-1 ml-2 truncate">{question.questionTitle}</span>
+              <span className="flex-1 ml-2 truncate"  dangerouslySetInnerHTML={{ __html: question?.questionTitle || '' }}></span>
             </li>
           ))}
         </ul>
