@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { queryFavoriteList } from '../../service/record';
+import { queryMistakeList } from '../../service/record';
 import { RecordType } from '../../types/record';
 
-const FavoriteList: React.FC = () => {
+const MistakeList: React.FC = () => {
   const navigator = useNavigate();
-  const [favoriteList, setFavoriteList] = useState<RecordType[]>()
+  const [mistakeList, setMistakeList] = useState<RecordType[]>()
 
   useEffect(() => {
-    queryFavoriteList().then(res => {
-      setFavoriteList(res.data)
+    queryMistakeList().then(res => {
+      setMistakeList(res.data)
     })
   }, [])
 
@@ -29,11 +29,11 @@ const FavoriteList: React.FC = () => {
           <button onClick={handleBack} className="mr-2 p-2 text-gray-600 hover:text-gray-800">
             <FaArrowLeft className="text-xl" />
           </button>
-          <h1 className="text-2xl font-bold text-center flex-grow">Favorite Questions</h1>
+          <h1 className="text-2xl font-bold text-center flex-grow">Mistake Questions</h1>
         </div>
         <div className="pt-20 min-h-screen overflow-y-auto px-4">
           <ul>
-            {favoriteList?.map((item, index) => (
+            {mistakeList?.map((item, index) => (
               <li
                 key={item.id}
                 onClick={() => handleItemClick(item.questionId)}
@@ -49,4 +49,4 @@ const FavoriteList: React.FC = () => {
   );
 };
 
-export default FavoriteList;
+export default MistakeList;

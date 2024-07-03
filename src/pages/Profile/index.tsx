@@ -30,13 +30,21 @@ const ProfilePage = () => {
               <FaStar className="text-2xl mb-2 mx-auto" />
               Favorite
             </div>
-            <div className="p-4 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer text-center border border-gray-300">
+            <div
+              className="p-4 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer text-center border border-gray-300"
+              onClick={() => {
+                navigator('/mistake');
+              }}
+            >
               <FaBook className="text-2xl mb-2 mx-auto" />
               Mistakes
             </div>
           </div>
           <div className="flex justify-center">
-            <button className="bg-black text-white py-2 px-4 rounded-full w-full hover:bg-gray-800" onClick={logout}>
+            <button
+              className="bg-black text-white py-2 px-4 rounded-full w-full hover:bg-gray-800"
+              onClick={logout}
+            >
               Logout
             </button>
           </div>

@@ -3,7 +3,7 @@ import { FaArrowLeft, FaRegStar, FaStar } from 'react-icons/fa';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { queryQuestionDetail } from '../../service/question';
-import { updateFavoriteItem } from '../../service/record';
+import { createRecord, updateFavoriteItem } from '../../service/record';
 import { QuestionDetail } from '../../types/question';
 
 const QuestionDetailPage = () => {
@@ -24,9 +24,15 @@ const QuestionDetailPage = () => {
   const handleBack = () => {
     navigator(-1);
   };
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setIsCorrect(selectedOption === questionDetail?.answerId);
     setIsDone(true);
+    await createRecord({
+      AnswerId: questionDetail?.answerId,
+      QuestionId: questionDetail?.questionId,
+      UserAnswerId: selectedOption,
+      RecordType: 'practice',
+    });
   };
   const onClickNext = () => {
     console.log(questionDetail?.nextQuestionId);
@@ -51,12 +57,20 @@ const QuestionDetailPage = () => {
     const defaultStyle = 'bg-gray-100 border-gray-300 hover:bg-gray-200';
     if (isDone) {
       if (isCorrect) {
-        return selectedOption === answerId ? 'bg-green-100 border-green-600' : defaultStyle;
+        return selectedOption === answerId
+          ? 'bg-green-100 border-green-600'
+          : defaultStyle;
       } else {
-        return selectedOption === answerId ? 'bg-red-100 border-red-600' : answerId === questionDetail?.answerId ? 'bg-green-100 border-green-600' : defaultStyle;
+        return selectedOption === answerId
+          ? 'bg-red-100 border-red-600'
+          : answerId === questionDetail?.answerId
+            ? 'bg-green-100 border-green-600'
+            : defaultStyle;
       }
     } else {
-      return selectedOption === answerId ? 'bg-blue-100 border-blue-600' : defaultStyle;
+      return selectedOption === answerId
+        ? 'bg-blue-100 border-blue-600'
+        : defaultStyle;
     }
   };
 
@@ -71,16 +85,27 @@ const QuestionDetailPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="flex items-center p-4 bg-white w-full fixed top-0 left-0 right-0 z-10 border-b">
-        <button onClick={handleBack} className="mr-2 p-2 text-gray-600 hover:text-gray-800">
+        <button
+          onClick={handleBack}
+          className="mr-2 p-2 text-gray-600 hover:text-gray-800"
+        >
           <FaArrowLeft className="text-xl" />
         </button>
-        <h1 className="text-2xl font-bold text-center flex-grow">Question Detail</h1>
+        <h1 className="text-2xl font-bold text-center flex-grow">
+          Question Detail
+        </h1>
         <button className="ml-2 p-2" onClick={onClickFavorite}>
-          {questionDetail?.isFavorite ? <FaStar className="text-xl" /> : <FaRegStar className="text-xl" />}
+          {questionDetail?.isFavorite ? (
+            <FaStar className="text-xl" />
+          ) : (
+            <FaRegStar className="text-xl" />
+          )}
         </button>
       </div>
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-        <h1 className="text-2xl font-bold mb-4">Question {questionDetail?.id}</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Question {questionDetail?.id}
+        </h1>
         <p className="text-lg mb-4">{questionDetail?.questionTitle}</p>
         <form>
           <div className="grid grid-cols-1 gap-4">
@@ -118,7 +143,11 @@ const QuestionDetailPage = () => {
             </div>
           ) : (
             <div className="flex justify-center mt-6">
-              <button type="button" className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-800 w-full" onClick={onSubmit}>
+              <button
+                type="button"
+                className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-800 w-full"
+                onClick={onSubmit}
+              >
                 Submit
               </button>
             </div>
