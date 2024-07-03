@@ -106,7 +106,7 @@ const QuestionDetailPage = () => {
         <h1 className="text-2xl font-bold mb-4">
           Question {questionDetail?.id}
         </h1>
-        <p className="text-lg mb-4">{questionDetail?.questionTitle}</p>
+        <p className="text-lg mb-4" dangerouslySetInnerHTML={{ __html: questionDetail?.questionTitle || '' }}></p>
         <form>
           <div className="grid grid-cols-1 gap-4">
             {questionDetail?.answerItems.map((option, index) => (
