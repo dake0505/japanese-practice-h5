@@ -24,5 +24,6 @@ export type QuestionDetail = {
   answerItems: Answer[]
   nextQuestionId: string,
   preQuestionId: string,
-  isFavorite: boolean
+  isFavorite: boolean,
+  questionType: 'audio' | 'text'
 }
